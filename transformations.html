@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+
+  <!-- The internet decreed thus: -->
+  <!-- https://forum.ionicframework.com/t/whitelist-plugin-does-not-work-external-scripts-fail-to-load-solved/29166/6 -->
+  <meta http-equiv="Content-Security-Policy" content="default-src *; script-src data: 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *">
+  <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+  <!-- Good default declaration:
+  * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+  * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+  * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+      * Enable inline JS: add 'unsafe-inline' to default-src
+      * Enable eval(): add 'unsafe-eval' to default-src
+  * Create your own at http://cspisawesome.com
+  -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+  <title>Language Comparisons</title>
+  <link rel="icon" type="image/png" href="/img/favicon.png" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+<body>
+  <div id="main">
+
+  <p>A quick reference comparison for syntax and features between languages.</p>
+
+
+
+<h2>Comments</h2>
+
+<p>Note: Custom types are sometimes called tagged unions. Some communities call them ADTs.</p>
+
+<div class="line">
+<pre><code class="elm">
+-- This is a comment
+ </code></pre>
+
+<pre><code class="haskell">
+-- This is a comment
+ </code></pre>
+
+<pre><code class="roc haskell">
+## This is a comment
+ </code></pre>
+
+</div>
+
+
+
+
+
+<h2>Primitives</h2>
+
+<div class="line">
+<pre><code class="elm">
+1 : Int
+
+1.1 : Float
+
+True : Bool
+
+False : Bool
+
+'c' : Char
+
+"hello" : String
+
+-- multi-line String
+"""
+This is useful for holding JSON or other
+content that has "quotation marks".
+"""
+
+
+
+(1,'c') : (Int, Char)
+
+Just 123 : Maybe Int
+
+Nothing : Maybe a
+
+Ok 123 : Result err Int
+
+Err "Problem!" : Result String a
+
+[1,2,3] : List Int
+
+Array.fromList [1,2,3] : Array Int
+
+
+Set.fromList [1,2,3] : Set Int
+
+
+x :: Dict Int Bool
+x = Dict.fromList [(1,True), (2, False)]
+
+-- Unit type
+() : ()
+
+ </code></pre>
+
+<pre><code class="haskell">
+1 :: Int
+
+1.1 :: Float
+
+True :: Bool
+
+False :: Bool
+
+'c' :: Char
+
+"hello" :: String
+
+-- Requires raw-strings-qq package
+{-# LANGUAGE QuasiQuotes #-}
+import Text.RawString.QQ
+[r|
+This is useful for holding JSON or other
+content that has "quotation marks".
+|]
+
+(1,'c') :: (Int, Char)
+
+Just 123 :: Maybe Int
+
+Nothing :: Maybe a
+
+Right 123 :: Either err Int
+
+Left "Problem!" :: Either String a
+
+[1,2,3] :: [Int] -- Note: type List a = [a]
+
+import qualified Data.Vector as Vector
+Vector.fromList [1,2,3] :: Vector Int
+
+import qualified Data.Set as Set
+Set.fromList [1,2,3] : Set Int
+
+import qualified Data.Map as Map
+x :: Map Int Bool
+x = Map.fromList [(1,True), (2, False)]
+
+-- Unit type
+() :: ()
+
+ </code></pre>
+
+<pre><code class="roc haskell">
+TBC
+ </code></pre>
+
+</div>
+
+
+<h2>Custom types</h2>
+
+<p>Note: Custom types are sometimes called tagged unions. Some communities call them ADTs.</p>
+
+<div class="line">
+<pre><code class="elm">
+type Status = Todo | Doing | Done
+
+Todo : Status
+
+Doing : Status
+
+Done : Status
+ </code></pre>
+
+<pre><code class="haskell">
+data Status = Todo | Doing | Done
+
+Todo :: Status
+
+Doing :: Status
+
+Done :: Status
+ </code></pre>
+
+<pre><code class="roc haskell">
+TBC
+ </code></pre>
+
+</div>
+
+<p>Custom types can be polymorphic. <code>Maybe a</code> is an example:</p>
+
+<div class="line">
+<pre><code class="elm">
+type Maybe a = Just a | Nothing
+
+Just 123 : Maybe Int
+
+Nothing : Maybe a
+ </code></pre>
+
+<pre><code class="haskell">
+data Maybe a = Just a | Nothing
+
+Just 123 :: Maybe Int
+
+Nothing :: Maybe a
+ </code></pre>
+
+<pre><code class="roc haskell">
+## No Maybe. This is by design. If a function
+## returns a potential error, use Result with an
+## error type that uses a zero-arg tag to describe
+## what went wrong. (For example,
+## List.first : List a -> Result a [ ListWasEmpty ]*
+## instead of
+## List.first : List a -> Maybe a.)
+## If you want to have a record field be optional,
+## use an Optional Record Field directly
+## (see earlier). If you want to describe something
+## that's neither an operation that can fail nor an
+## optional field, use a more descriptive tag - e.g.
+## for a nullable JSON decoder, instead of
+## nullable : Decoder a -> Decoder (Maybe a),
+## make a self-documenting API like
+## nullable : Decoder a -> Decoder [ Null, NonNull a ]*.
+ </code></pre>
+
+</div>
+
+
+<h2>Records</h2>
+
+<div class="line">
+<pre><code class="elm">
+point =                       -- create a record
+  { x = 3, y = 4 }
+
+point.x                       -- access field
+
+List.map .x [point,{x=0,y=0}] -- field access function
+
+{ point | x = 6 }             -- update a field
+
+{ point                       -- update many fields
+  | x = point.x + 1
+  , y = point.y + 1
+}
+
+dist {x,y} =                  -- pattern matching on fields
+  sqrt (x^2 + y^2)
+
+type alias Location =         -- type aliases for records
+  { line : Int
+  , column : Int
+  }
+
+ </code></pre>
+
+<pre><code class="haskell">
+-- Haskell has no anonymous records
+
+
+x point
+
+fmap x [point,point]
+
+point { x = 6 }
+
+point
+  { x = (x point) + 1
+  , y = (y point) + 1
+  }
+
+dist Point{..} = -- Requires RecordWildCards
+  sqrt (x^2 + y^2)
+
+data Location =
+  Location
+    { line : Int
+    , column : Int
+    }
+ </code></pre>
+
+<pre><code class="roc haskell">
+point =
+  { x: 3, y: 4 }
+
+point.x
+
+List.map .x [point,{x=0,y=0}]
+
+{ point | x = 6 }
+
+{ point
+  & x: point.x + 1
+  , y: point.y + 1
+}
+
+dist = \{x,y} ->
+  sqrt (x^2 + y^2)
+
+Location :
+  { line : Int
+  , column : Int
+  }
+ </code></pre>
+
+</div>
+
+
+
+<h2>Functions</h2>
+
+<div class="line">
+<pre><code class="elm">
+addOne : Int -> Int
+addOne x = x + 1
+
+add : Int -> Int -> Int
+add x y = x + y
+
+add : Int -> Int -> Int
+add = (+)
+
+poly : a -> Int
+poly x = 14
+ </code></pre>
+
+<pre><code class="haskell">
+addOne :: Int -> Int
+addOne x = x + 1
+
+add :: Int -> Int -> Int
+add x y = x + y
+
+add :: Int -> Int -> Int
+add = (+)
+
+poly :: a -> Int
+poly x = 14
+ </code></pre>
+
+<pre><code class="roc haskell">
+addOne : Int, Int
+addOne = \x -> x + 1
+
+add : Int, Int, Int
+add = \x, y -> x + y
+
+add : Int -> Int -> Int --@TODO is this right?
+add = (+)
+
+poly : a, Int
+poly = \x -> 14
+ </code></pre>
+
+</div>
+
+
+
+<h2>Anonymous Functions</h2>
+
+<div class="line">
+<pre><code class="elm">
+square =
+  \n -> n ^ 2
+
+squares =
+  List.map (\n -> n ^ 2) (List.range 1 100)
+ </code></pre>
+
+<pre><code class="haskell">
+square =
+  \n -> n ^ 2
+
+squares =
+  fmap (\n -> n ^ 2) [1..100]
+ </code></pre>
+
+<pre><code class="roc haskell">
+square =
+  \n -> n ^ 2
+
+squares =
+  List.map (\n -> n ^ 2) (List.range 1 100)
+ </code></pre>
+
+</div>
+
+
+
+<h2>Function application & composition</h2>
+
+All the following are equivalent.
+
+<div class="line">
+<pre><code class="elm">
+
+
+
+
+viewNames names =
+  String.join ", " (List.sort names)
+
+viewNames names =
+  String.join ", " <| List.sort names
+
+viewNames names =
+  names
+    |> List.sort
+    |> String.join ", "
+
+viewNames =
+  String.join ", " << List.sort
+
+viewNames =
+  List.sort >> String.join ", "
+ </code></pre>
+
+<pre><code class="haskell">
+import qualified Data.List as List
+import Data.Function ((&))
+import Control.Arrow ((>>>))
+
+viewNames names =
+  List.intercalate ", " (List.sort names)
+
+viewNames names =
+  List.intercalate ", " $ List.sort names
+
+viewNames names =
+  names
+    & List.sort
+    & (List.intercalate ", ")
+
+viewNames =
+  List.intercalate ", " . List.sort
+
+viewNames =
+  List.sort . List.intercalate ", "
+ </code></pre>
+
+<pre><code class="roc haskell">
+TBC
+ </code></pre>
+
+</div>
+
+
+
+<h2>Conditionals</h2>
+
+<div class="line">
+<pre><code class="elm">
+if power > 9000 then "Wow!" else "Meh"
+
+if key == 40 then
+  n + 1
+
+else if key == 38 then
+  n - 1
+
+else
+  n
+ </code></pre>
+
+<pre><code class="haskell">
+if power > 9000 then "Wow!" else "Meh"
+
+if key == 40 then
+  n + 1
+
+else if key == 38 then
+  n - 1
+
+else
+  n
+ </code></pre>
+
+<pre><code class="roc haskell">
+TBC
+ </code></pre>
+
+</div>
+
+
+
+<h2>Pattern matching</h2>
+
+<div class="line">
+<pre><code class="elm">
+case maybe of
+  Just xs -> xs
+  Nothing -> []
+
+case xs of
+  hd::tl -> Just (hd,tl)
+  []     -> Nothing
+
+fib n =
+  case n of
+    0 -> 1
+    1 -> 1
+    _ -> fib (n-1) + fib (n-2)
+ </code></pre>
+
+<pre><code class="haskell">
+case maybe of
+  Just xs -> xs
+  Nothing -> []
+
+case xs of
+  hd:tl -> Just (hd,tl)
+  []     -> Nothing
+
+fib n =
+  case n of
+    0 -> 1
+    1 -> 1
+    _ -> fib (n-1) + fib (n-2)
+ </code></pre>
+
+<pre><code class="roc haskell">
+TBC
+ </code></pre>
+
+</div>
+
+
+
+
+<h2>Let expressions</h2>
+
+<div class="line">
+<pre><code class="elm">
+let
+  ( three, four ) =
+    ( 3, 4 )
+
+  hypotenuse a b =
+    sqrt (a^2 + b^2)
+in
+hypotenuse three four
+ </code></pre>
+
+<pre><code class="haskell">
+let
+  ( three, four ) =
+    ( 3, 4 )
+
+  hypotenuse a b =
+    sqrt (a^2 + b^2)
+in
+hypotenuse three four
+ </code></pre>
+
+<pre><code class="roc haskell">
+## No let/in required, indentation sensitive
+( three, four ) =
+  ( 3, 4 )
+
+hypotenuse a b =
+  sqrt (a^2 + b^2)
+
+hypotenuse three four
+ </code></pre>
+
+</div>
+
+
+
+
+<h2>Modules</h2>
+
+<div class="line">
+<pre><code class="elm">
+module MyModule exposing (..)
+
+-- qualified imports
+import List                            -- List.map, List.foldl
+import List as L                       -- L.map, L.foldl
+
+-- open imports
+import List exposing (..)              -- map, foldl, concat, ...
+import List exposing ( map, foldl )    -- map, foldl
+
+import Maybe exposing ( Maybe )        -- Maybe
+import Maybe exposing ( Maybe(..) )    -- Maybe, Just, Nothing
+ </code></pre>
+
+<pre><code class="haskell">
+module MyModule where
+
+-- qualified imports
+import qualified List                  -- List.map, List.foldl
+import qualified List as L             -- L.map, L.foldl
+
+-- open imports
+import List                            -- map, foldl, concat, ...
+import List ( map, foldl )             -- map, foldl
+
+import Maybe ( Maybe )        -- Maybe
+import Maybe ( Maybe(..) )    -- Maybe, Just, Nothing
+ </code></pre>
+
+<pre><code class="roc haskell">
+TBC
+ </code></pre>
+
+</div>
+
+
+
+
+<h2>Type Annotations</h2>
+
+<div class="line">
+<pre><code class="elm">
+answer : Int
+answer =
+  42
+
+factorial : Int -> Int
+factorial n =
+  List.product (List.range 1 n)
+
+
+
+
+distance : { x : Float, y : Float } -> Float
+distance {x,y} =
+  sqrt (x^2 + y^2)
+ </code></pre>
+
+<pre><code class="haskell">
+answer :: Int
+answer =
+  42
+
+factorial :: Int -> Int
+factorial n =
+  List.product (List.range 1 n)
+
+-- Haskell has no anonymous records
+data Point =  Point { x :: Float, y :: Float }
+
+distance :: Point -> Float
+distance Point{..} = -- Requires RecordWildCards
+  sqrt (x^2 + y^2)
+ </code></pre>
+
+<pre><code class="roc haskell">
+answer : Int
+answer =
+  42
+
+factorial : Int, Int
+factorial = \n ->
+  List.product (List.range 1 n)
+
+
+
+
+distance : { x : Float, y : Float }, Float
+distance = \{x,y} ->
+  sqrt (x^2 + y^2)
+ </code></pre>
+
+</div>
+
+
+
+
+<h2>Type Aliases</h2>
+
+<div class="line">
+<pre><code class="elm">
+type alias Name = String
+type alias Age = Int
+
+info : (Name, Age)
+info =
+  ("Steve", 28)
+
+type alias Point = { x : Float, y : Float }
+
+origin : Point
+origin =
+  { x = 0, y = 0 }
+ </code></pre>
+
+<pre><code class="haskell">
+type Name = String
+type Age = Int
+
+info :: (Name, Age)
+info =
+  ("Steve", 28)
+
+data Point = Point { x :: Float, y :: Float }
+
+origin :: Point
+origin =
+  Point { x = 0, y = 0 }
+ </code></pre>
+
+<pre><code class="roc haskell">
+Name : String
+Age : Int
+
+info : (Name, Age)
+info =
+  ("Steve", 28)
+
+Point : { x : Float, y : Float }
+
+origin : Point
+origin =
+  { x = 0, y = 0 }
+ </code></pre>
+
+</div>
+
+
+<h2>String interpolation</h2>
+
+In all cases `toEuros` must return a string.
+
+<div class="line">
+<pre><code class="elm">
+-- None, use concatenation
+costOnSale money =
+  "It cost " ++ toEuros money ++ " when on sale."
+ </code></pre>
+
+<pre><code class="haskell">
+-- None, use concatenation
+costOnSale money =
+  "It cost " ++ toEuros money ++ " when on sale."
+
+-- Alternatively, with a QuasiQuotes package
+{-# LANGUAGE QuasiQuotes #-}
+import NeatInterpolation
+
+costOnSale money =
+  let
+    euros = toEuros money
+  in
+  [text|
+    It cost ${euros} when on sale.
+  |]
+ </code></pre>
+
+<pre><code class="roc haskell">
+costOnSale money =
+  euros = toEuros money
+  "It cost \(euros) when on sale."
+ </code></pre>
+
+</div>
+
+  </div>
+
+  <link rel="stylesheet" href="https://mario.net.au/f/atom-one-dark.css">
+  <script src="https://mario.net.au/f/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <style>
+    body, h1, h2, h3, h4, h5, input {
+      font-family: 'Open Sans', sans-serif;
+    }
+    html, body {
+      height: 100%;
+      width: 1650px;
+      margin: 0;
+      /* Prevent grey flash in iOS on element selection */
+      -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+
+      padding: 10px;
+    }
+
+    #main {
+      padding-bottom: 20px;
+    }
+
+    .elm::before {
+      content: "                                          Elm";
+      color: #fff;
+    }
+    .haskell::before {
+      content: "                                      Haskell";
+      color: #fff;
+    }
+    .roc::before {
+      content: "                                          Roc";
+      color: #fff;
+    }
+
+    pre {
+      float: left;
+      width: 380px;
+      margin-right: 8px;
+      /* white-space: pre-line; */
+    }
+    .line code {
+      padding-left: 15px !important;
+    }
+
+    .line {
+      overflow: auto;
+    }
+  </style>
+</body>
+</html>
