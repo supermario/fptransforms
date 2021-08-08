@@ -282,7 +282,7 @@ List.map .x [ point, { x = 0, y = 0 } ] -- field access function
   , y = point.y + 1
 }
 
-dist { x, y } =                  -- pattern matching on fields
+dist { x, y } =               -- pattern matching on fields
   sqrt (x ^ 2 + y ^ 2)
 
 type alias Location =         -- type aliases for records
