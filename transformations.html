@@ -272,7 +272,7 @@ Nothing : Maybe *
 <div class="line">
 <pre><code class="elm">
 point =                       -- create a record
-  { x = 3, y = 4 }
+    { x = 3, y = 4 }
 
 point.x                       -- access field
 
@@ -281,17 +281,17 @@ List.map .x [ point, { x = 0, y = 0 } ] -- field access function
 { point | x = 6 }             -- update a field
 
 { point                       -- update many fields
-  | x = point.x + 1
-  , y = point.y + 1
+    | x = point.x + 1
+    , y = point.y + 1
 }
 
 dist { x, y } =               -- pattern matching on fields
-  sqrt (x ^ 2 + y ^ 2)
+    sqrt (x ^ 2 + y ^ 2)
 
 type alias Location =         -- type aliases for records
-  { line : Int
-  , column : Int
-  }
+    { line : Int
+    , column : Int
+    }
 
  </code></pre>
 
@@ -444,21 +444,21 @@ All the following are equivalent.
 
 
 viewNames names =
-  String.join ", " (List.sort names)
+    String.join ", " (List.sort names)
 
 viewNames names =
-  String.join ", " <| List.sort names
+    String.join ", " <| List.sort names
 
 viewNames names =
-  names
-    |> List.sort
-    |> String.join ", "
+    names
+        |> List.sort
+        |> String.join ", "
 
 viewNames =
-  String.join ", " << List.sort
+    String.join ", " << List.sort
 
 viewNames =
-  List.sort >> String.join ", "
+    List.sort >> String.join ", "
  </code></pre>
 
 <pre><code class="haskell">
@@ -512,13 +512,13 @@ viewNames = \names ->
 if power > 9000 then "Wow!" else "Meh"
 
 if key == 40 then
-  n + 1
+    n + 1
 
 else if key == 38 then
-  n - 1
+    n - 1
 
 else
-  n
+    n
  </code></pre>
 
 <pre><code class="haskell">
@@ -554,18 +554,18 @@ else
 <div class="line">
 <pre><code class="elm">
 case maybe of
-  Just xs -> xs
-  Nothing -> []
+    Just xs -> xs
+    Nothing -> []
 
 case xs of
-  hd::tl -> Just (hd,tl)
-  []     -> Nothing
+    hd::tl -> Just (hd,tl)
+    []     -> Nothing
 
 fib n =
-  case n of
-    0 -> 1
-    1 -> 1
-    _ -> fib (n-1) + fib (n-2)
+    case n of
+      0 -> 1
+      1 -> 1
+      _ -> fib (n-1) + fib (n-2)
  </code></pre>
 
 <pre><code class="haskell">
@@ -609,22 +609,22 @@ fib = \n ->
 <div class="line">
 <pre><code class="elm">
 let
-  ( three, four ) =
-    ( 3, 4 )
+    ( three, four ) =
+        ( 3, 4 )
 
-  hypotenuse a b =
-    sqrt (a^2 + b^2)
+    hypotenuse a b =
+        sqrt (a^2 + b^2)
 in
 hypotenuse three four
  </code></pre>
 
 <pre><code class="haskell">
 let
-  ( three, four ) =
-    ( 3, 4 )
+    ( three, four ) =
+        ( 3, 4 )
 
-  hypotenuse a b =
-    sqrt (a^2 + b^2)
+    hypotenuse a b =
+        sqrt (a^2 + b^2)
 in
 hypotenuse three four
  </code></pre>
@@ -708,35 +708,35 @@ interface MyModule
 <pre><code class="elm">
 answer : Int
 answer =
-  42
+    42
 
 factorial : Int -> Int
 factorial n =
-  List.product (List.range 1 n)
+    List.product (List.range 1 n)
 
 
 
 
 distance : { x : Float, y : Float } -> Float
 distance {x,y} =
-  sqrt (x^2 + y^2)
+    sqrt (x^2 + y^2)
  </code></pre>
 
 <pre><code class="haskell">
 answer :: Int
 answer =
-  42
+    42
 
 factorial :: Int -> Int
 factorial n =
-  List.product (List.range 1 n)
+    List.product (List.range 1 n)
 
 -- Haskell has no anonymous records
 data Point =  Point { x :: Float, y :: Float }
 
 distance :: Point -> Float
 distance Point{..} = -- Requires RecordWildCards
-  sqrt (x^2 + y^2)
+    sqrt (x^2 + y^2)
  </code></pre>
 
 <pre><code class="roc elm">
@@ -747,6 +747,9 @@ answer =
 factorial : I32 -> I32
 factorial = \n ->
     List.product (List.range 1 n)
+
+
+
 
 distance : { x : F64, y : F64 } -> F64
 distance = \{ x, y} ->
@@ -797,7 +800,7 @@ Age : I32
 
 info : [ Pair Name Age ]*
 info =
-  Pair "Steve" 28
+    Pair "Steve" 28
 
 Point : { x : F64, y : F64 }
 
@@ -817,7 +820,7 @@ In all cases `toEuros` must return a string.
 <pre><code class="elm">
 -- None, use concatenation
 costOnSale money =
-  "It cost " ++ toEuros money ++ " when on sale."
+    "It cost " ++ toEuros money ++ " when on sale."
  </code></pre>
 
 <pre><code class="haskell">
@@ -840,9 +843,9 @@ costOnSale money =
 
 <pre><code class="roc elm">
 costOnSale = \money ->
-  euros = toEuros money
+    euros = toEuros money
 
-  "It cost \(euros) when on sale."
+    "It cost \(euros) when on sale."
  </code></pre>
 
 </div>
