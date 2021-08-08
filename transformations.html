@@ -323,7 +323,7 @@ point =
 
 point.x
 
-List.map [ point, { x: 0, y: 0 } ] .x 
+List.map [ point, { x: 0, y: 0 } ] .x
 
 { point & x: 6 }
 
@@ -677,10 +677,10 @@ interface MyModule
         [
             # Qualified imports
             List as L, # L.map, L.walk
-            
+
             # Open imports (Roc does not have "expose everything" syntax)
             List.{ map, walk }
-            
+
             # Imports the Result module and also the Result type
             Result.{ Result }
         ]
@@ -830,7 +830,7 @@ costOnSale money =
 <pre><code class="roc coffeescript">
 costOnSale = \money ->
   euros = toEuros money
-  
+
   "It cost \(euros) when on sale."
  </code></pre>
 
