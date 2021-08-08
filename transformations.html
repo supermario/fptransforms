@@ -388,9 +388,9 @@ addOne = \x -> x + 1
 add : I32, I32 -> I32
 add = \x, y -> x + y
 
-# Roc does not have (+) syntax for
-# operators; instead, operators desugar
-# to normal function calls like Num.add
+# Roc does not have (+) syntax for operators;
+# instead, operators desugar to
+# plain function calls like Num.add
 add : I32, I32 -> I32
 add = Num.add
 
@@ -488,14 +488,16 @@ viewNames =
 viewNames = \names ->
     Str.join (List.sort names Str.alphabetical) ", "
 
-# Roc does not have an equivalent of the `<|` operator.
+# Roc does not have an equivalent of
+# the `<|` operator.
 
 viewNames = \names ->
     names
         |> List.sort Str.alphabetical
         |> Str.join ", "
 
-# Roc does not have an equivalent of the `<<` operator or the `>>` operator.
+# Roc does not have an equivalent of
+# the `<<` operator or the `>>` operator.
 
  </code></pre>
 
@@ -587,7 +589,8 @@ when maybe is
     Just xs -> xs
     Nothing -> []
 
-# Roc does not have special pattern matching syntax for lists
+# Roc does not have special
+# pattern matching syntax for lists
 
 fib = \n ->
     when n is
