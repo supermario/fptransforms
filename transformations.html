@@ -173,7 +173,8 @@ content that has "quotation marks".
 
 
 
-# Roc does not have tuple syntax or a built-in Maybe type
+# Roc does not have tuple syntax
+# or a built-in Maybe type
 
 Ok 123 : Result I32 *
 
@@ -181,7 +182,9 @@ Err "Problem!" : Result * Str
 
 [ 1, 2, 3 ] : List I32
 
-# Roc does not have an Array type, but List is implemented using a flat array instead of a linked list
+# Roc does not have an Array type,
+# but List is implemented using
+# a flat array instead of a linked list
 
 
 [: 1, 2, 3 :] : Set Int
@@ -385,9 +388,11 @@ addOne = \x -> x + 1
 add : I32, I32 -> I32
 add = \x, y -> x + y
 
+# Roc does not have (+) syntax for
+# operators; instead, operators desugar
+# to normal function calls like Num.add
 add : I32, I32 -> I32
-add = Num.add # Roc does not have (+) syntax for operators; instead,
-              # operators desugar to normal function calls like Num.add
+add = Num.add
 
 poly : * -> I32
 poly = \x -> 14
@@ -672,16 +677,19 @@ import Maybe ( Maybe(..) )    -- Maybe, Just, Nothing
 
 <pre><code class="roc coffeescript">
 interface MyModule
-    exposes [ foo, blah ] # Roc does not have "expose everything" syntax
+    # Roc has no "expose everything" syntax
+    exposes [ foo, blah ]
     imports
         [
             # Qualified imports
             List as L, # L.map, L.walk
 
-            # Open imports (Roc does not have "expose everything" syntax)
+            # Open imports (Roc has no
+            # "expose everything" syntax)
             List.{ map, walk }
 
-            # Imports the Result module and also the Result type
+            # Imports the Result module
+            # and also the Result type
             Result.{ Result }
         ]
  </code></pre>
