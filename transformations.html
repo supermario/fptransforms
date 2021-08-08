@@ -225,7 +225,7 @@ Doing :: Status
 Done :: Status
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc haskell">
 Status : [ Todo | Doing | Done ]
 
 Todo : Status
@@ -256,7 +256,7 @@ Just 123 :: Maybe Int
 Nothing :: Maybe a
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc haskell">
 Maybe a : [ Just a | Nothing ]
 
 Just 123 : Maybe Int
@@ -320,7 +320,7 @@ data Location =
     }
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc haskell">
 point =
     { x: 3, y: 4 }
 
@@ -381,7 +381,7 @@ poly :: a -> Int
 poly x = 14
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc elixir">
 addOne : I32 -> I32
 addOne = \x -> x + 1
 
@@ -421,7 +421,7 @@ squares =
   fmap (\n -> n ^ 2) [1..100]
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc elm">
 square = \n ->
     n ^ 2
 
@@ -484,7 +484,7 @@ viewNames =
   List.sort . List.intercalate ", "
  </code></pre>
 
-<pre><code class="roc haskell">
+<pre><code class="roc elixir">
 viewNames = \names ->
     Str.join (List.sort names Str.alphabetical) ", "
 
@@ -532,7 +532,7 @@ else
   n
  </code></pre>
 
-<pre><code class="roc haskell">
+<pre><code class="roc elm">
 if power > 9000 then "Wow!" else "Meh"
 
 if key == 40 then
@@ -626,7 +626,7 @@ in
 hypotenuse three four
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc elixir">
 # No let/in required, indentation sensitive
 Pair three four =
     Pair 3 4
@@ -675,7 +675,7 @@ import Maybe ( Maybe )        -- Maybe
 import Maybe ( Maybe(..) )    -- Maybe, Just, Nothing
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc elixir">
 interface MyModule
     # Roc has no "expose everything" syntax
     exposes [ foo, blah ]
@@ -736,7 +736,7 @@ distance Point{..} = -- Requires RecordWildCards
   sqrt (x^2 + y^2)
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc elm">
 answer : I32
 answer =
     42
@@ -788,7 +788,7 @@ origin =
   Point { x = 0, y = 0 }
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc elm">
 Name : Str
 Age : I32
 
@@ -835,7 +835,7 @@ costOnSale money =
   |]
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc swift">
 costOnSale = \money ->
   euros = toEuros money
 
