@@ -44,8 +44,8 @@
 -- This is a comment
  </code></pre>
 
-<pre><code class="roc haskell">
-## This is a comment
+<pre><code class="roc coffeescript">
+# This is a comment
  </code></pre>
 
 </div>
@@ -88,21 +88,23 @@ Ok 123 : Result err Int
 
 Err "Problem!" : Result String a
 
-[1,2,3] : List Int
+[ 1, 2, 3 ] : List Int
 
-Array.fromList [1,2,3] : Array Int
-
-
-Set.fromList [1,2,3] : Set Int
+Array.fromList [ 1, 2, 3] : Array Int
 
 
-x :: Dict Int Bool
-x = Dict.fromList [(1,True), (2, False)]
+
+Set.fromList [1, 2, 3] : Set Int
+
+
+x : Dict Int Bool
+x = Dict.fromList [ ( 1 , True ), ( 2, False ) ]
+
 
 -- Unit type
 () : ()
 
- </code></pre>
+</code></pre>
 
 <pre><code class="haskell">
 1 :: Int
@@ -140,6 +142,7 @@ Left "Problem!" :: Either String a
 import qualified Data.Vector as Vector
 Vector.fromList [1,2,3] :: Vector Int
 
+
 import qualified Data.Set as Set
 Set.fromList [1,2,3] : Set Int
 
@@ -150,11 +153,56 @@ x = Map.fromList [(1,True), (2, False)]
 -- Unit type
 () :: ()
 
- </code></pre>
+</code></pre>
 
 <pre><code class="roc haskell">
-TBC
- </code></pre>
+1 : I32
+
+1.1 : F64
+
+True : Bool
+
+False : Bool
+
+'c' : U8
+
+"hello" : Str
+
+# multi-line String
+"""
+This is useful for holding JSON or other
+content that has "quotation marks".
+"""
+
+
+
+# Roc does not have tuple syntax
+
+# or a built-in Maybe type
+
+
+
+Ok 123 : Result I32 *
+
+Err "Problem!" : Result * Str
+
+[ 1, 2, 3 ] : List I32
+
+# Roc does not have an Array type,
+# but List is implemented using
+# a flat array instead of a linked list
+
+[: 1, 2, 3 :] : Set Int
+
+
+x : Dict I32 Bool
+x = {: 1 => True, 2 => False :}
+
+
+-- Unit type
+{} : {}
+
+</code></pre>
 
 </div>
 
@@ -172,7 +220,8 @@ Todo : Status
 Doing : Status
 
 Done : Status
- </code></pre>
+
+</code></pre>
 
 <pre><code class="haskell">
 data Status = Todo | Doing | Done
@@ -182,11 +231,19 @@ Todo :: Status
 Doing :: Status
 
 Done :: Status
- </code></pre>
+
+</code></pre>
 
 <pre><code class="roc haskell">
-TBC
- </code></pre>
+Status : [ Todo | Doing | Done ]
+
+Todo : Status
+
+Doing : Status
+
+Done : Status
+
+</code></pre>
 
 </div>
 
@@ -199,7 +256,8 @@ type Maybe a = Just a | Nothing
 Just 123 : Maybe Int
 
 Nothing : Maybe a
- </code></pre>
+
+</code></pre>
 
 <pre><code class="haskell">
 data Maybe a = Just a | Nothing
@@ -207,26 +265,17 @@ data Maybe a = Just a | Nothing
 Just 123 :: Maybe Int
 
 Nothing :: Maybe a
- </code></pre>
+
+</code></pre>
 
 <pre><code class="roc haskell">
-## No Maybe. This is by design. If a function
-## returns a potential error, use Result with an
-## error type that uses a zero-arg tag to describe
-## what went wrong. (For example,
-## List.first : List a -> Result a [ ListWasEmpty ]*
-## instead of
-## List.first : List a -> Maybe a.)
-## If you want to have a record field be optional,
-## use an Optional Record Field directly
-## (see earlier). If you want to describe something
-## that's neither an operation that can fail nor an
-## optional field, use a more descriptive tag - e.g.
-## for a nullable JSON decoder, instead of
-## nullable : Decoder a -> Decoder (Maybe a),
-## make a self-documenting API like
-## nullable : Decoder a -> Decoder [ Null, NonNull a ]*.
- </code></pre>
+Maybe a : [ Just a | Nothing ]
+
+Just 123 : Maybe Int
+
+Nothing : Maybe *
+
+</code></pre>
 
 </div>
 
@@ -236,26 +285,27 @@ Nothing :: Maybe a
 <div class="line">
 <pre><code class="elm">
 point =                       -- create a record
-  { x = 3, y = 4 }
+    { x = 3, y = 4 }
 
 point.x                       -- access field
 
-List.map .x [point,{x=0,y=0}] -- field access function
+List.map .x [ point, { x = 0, y = 0 } ] -- field access function
 
 { point | x = 6 }             -- update a field
 
 { point                       -- update many fields
-  | x = point.x + 1
-  , y = point.y + 1
+    | x = point.x + 1
+    , y = point.y + 1
 }
 
-dist {x,y} =                  -- pattern matching on fields
-  sqrt (x^2 + y^2)
+
+dist { x, y } =               -- pattern matching on fields
+    sqrt (x ^ 2 + y ^ 2)
 
 type alias Location =         -- type aliases for records
-  { line : Int
-  , column : Int
-  }
+    { line : Int
+    , column : Int
+    }
 
  </code></pre>
 
@@ -274,6 +324,7 @@ point
   , y = (y point) + 1
   }
 
+
 dist Point{..} = -- Requires RecordWildCards
   sqrt (x^2 + y^2)
 
@@ -286,26 +337,28 @@ data Location =
 
 <pre><code class="roc haskell">
 point =
-  { x: 3, y: 4 }
+    { x: 3, y: 4 }
 
 point.x
 
-List.map .x [point,{x=0,y=0}]
+List.map [ point, { x: 0, y: 0 } ] .x
 
-{ point & x = 6 }
+{ point & x: 6 }
 
-{ point
-  & x: point.x + 1
-  , y: point.y + 1
+{
+    point &
+    x: point.x + 1,
+    y: point.y + 1,
 }
 
-dist = \{x,y} ->
-  sqrt (x^2 + y^2)
+dist = \{ x, y } ->
+    sqrt (x ^ 2 + y ^ 2)
 
 Location :
-  { line : Int
-  , column : Int
-  }
+    {
+        line : I32,
+        column : I32,
+    }
  </code></pre>
 
 </div>
@@ -325,6 +378,9 @@ add x y = x + y
 add : Int -> Int -> Int
 add = (+)
 
+
+
+
 poly : a -> Int
 poly x = 14
  </code></pre>
@@ -339,21 +395,27 @@ add x y = x + y
 add :: Int -> Int -> Int
 add = (+)
 
+
+
+
 poly :: a -> Int
 poly x = 14
  </code></pre>
 
-<pre><code class="roc haskell">
-addOne : Int, Int
+<pre><code class="roc elixir">
+addOne : I32 -> I32
 addOne = \x -> x + 1
 
-add : Int, Int, Int
+add : I32, I32 -> I32
 add = \x, y -> x + y
 
-add : Int -> Int -> Int --@TODO is this right?
-add = (+)
+add : I32, I32 -> I32
+add = Num.add
+# Roc does not have (+) syntax for operators;
+# instead, operators desugar to
+# plain function calls like Num.add
 
-poly : a, Int
+poly : * -> I32
 poly = \x -> 14
  </code></pre>
 
@@ -366,10 +428,10 @@ poly = \x -> 14
 <div class="line">
 <pre><code class="elm">
 square =
-  \n -> n ^ 2
+    \n -> n ^ 2
 
 squares =
-  List.map (\n -> n ^ 2) (List.range 1 100)
+    List.map (\n -> n ^ 2) (List.range 1 100)
  </code></pre>
 
 <pre><code class="haskell">
@@ -380,12 +442,12 @@ squares =
   fmap (\n -> n ^ 2) [1..100]
  </code></pre>
 
-<pre><code class="roc haskell">
-square =
-  \n -> n ^ 2
+<pre><code class="roc elm">
+square = \n ->
+    n ^ 2
 
 squares =
-  List.map (\n -> n ^ 2) (List.range 1 100)
+    List.map (List.range 1 100) \n -> n ^ 2
  </code></pre>
 
 </div>
@@ -403,21 +465,21 @@ All the following are equivalent.
 
 
 viewNames names =
-  String.join ", " (List.sort names)
+    String.join ", " (List.sort names)
 
 viewNames names =
-  String.join ", " <| List.sort names
+    String.join ", " <| List.sort names
 
 viewNames names =
-  names
-    |> List.sort
-    |> String.join ", "
+    names
+        |> List.sort
+        |> String.join ", "
 
 viewNames =
-  String.join ", " << List.sort
+    String.join ", " << List.sort
 
 viewNames =
-  List.sort >> String.join ", "
+    List.sort >> String.join ", "
  </code></pre>
 
 <pre><code class="haskell">
@@ -444,7 +506,26 @@ viewNames =
  </code></pre>
 
 <pre><code class="roc haskell">
-TBC
+
+
+
+
+viewNames = \names ->
+    Str.join (List.sort names Str.alphabetical) ", "
+
+# Roc does not have an equivalent of
+# the `<|` operator.
+
+viewNames = \names ->
+    names
+        |> List.sort Str.alphabetical
+        |> Str.join ", "
+
+# Roc does not have an equivalent of
+# the `<<` operator
+
+# or the `>>` operator.
+
  </code></pre>
 
 </div>
@@ -458,13 +539,13 @@ TBC
 if power > 9000 then "Wow!" else "Meh"
 
 if key == 40 then
-  n + 1
+    n + 1
 
 else if key == 38 then
-  n - 1
+    n - 1
 
 else
-  n
+    n
  </code></pre>
 
 <pre><code class="haskell">
@@ -480,9 +561,19 @@ else
   n
  </code></pre>
 
-<pre><code class="roc haskell">
-TBC
- </code></pre>
+<pre><code class="roc elm">
+if power > 9000 then "Wow!" else "Meh"
+
+if key == 40 then
+    n + 1
+else if key == 38 then
+    n - 1
+else
+    n
+
+
+
+</code></pre>
 
 </div>
 
@@ -493,18 +584,18 @@ TBC
 <div class="line">
 <pre><code class="elm">
 case maybe of
-  Just xs -> xs
-  Nothing -> []
+    Just xs -> xs
+    Nothing -> []
 
 case xs of
-  hd::tl -> Just (hd,tl)
-  []     -> Nothing
+    hd::tl -> Just (hd,tl)
+    []     -> Nothing
 
 fib n =
-  case n of
-    0 -> 1
-    1 -> 1
-    _ -> fib (n-1) + fib (n-2)
+    case n of
+      0 -> 1
+      1 -> 1
+      _ -> fib (n-1) + fib (n-2)
  </code></pre>
 
 <pre><code class="haskell">
@@ -523,8 +614,20 @@ fib n =
     _ -> fib (n-1) + fib (n-2)
  </code></pre>
 
-<pre><code class="roc haskell">
-TBC
+<pre><code class="roc coffeescript">
+when maybe is
+    Just xs -> xs
+    Nothing -> []
+
+# Roc does not have special
+# pattern matching syntax for lists
+
+
+fib = \n ->
+    when n is
+        0 -> 1
+        1 -> 1
+        _ -> fib (n - 1) + fib (n - 2)
  </code></pre>
 
 </div>
@@ -536,37 +639,43 @@ TBC
 
 <div class="line">
 <pre><code class="elm">
-let
-  ( three, four ) =
-    ( 3, 4 )
+functionWithLetDecs =
+    let
+        ( three, four ) =
+            ( 3, 4 )
 
-  hypotenuse a b =
-    sqrt (a^2 + b^2)
-in
-hypotenuse three four
- </code></pre>
+        hypotenuse a b =
+            sqrt (a^2 + b^2)
+    in
+    hypotenuse three four
+
+</code></pre>
 
 <pre><code class="haskell">
-let
-  ( three, four ) =
-    ( 3, 4 )
+functionWithLetDecs =
+  let
+      ( three, four ) =
+          ( 3, 4 )
 
-  hypotenuse a b =
-    sqrt (a^2 + b^2)
-in
-hypotenuse three four
- </code></pre>
+      hypotenuse a b =
+          sqrt (a^2 + b^2)
+  in
+  hypotenuse three four
+
+</code></pre>
 
 <pre><code class="roc haskell">
-## No let/in required, indentation sensitive
-( three, four ) =
-  ( 3, 4 )
+functionWithLetDecs =
+    Pair three four =
+        Pair 3 4
 
-hypotenuse a b =
-  sqrt (a^2 + b^2)
+    hypotenuse = \a, b ->
+        Num.sqrt (a ^ 2 + b ^ 2)
 
-hypotenuse three four
- </code></pre>
+    hypotenuse three four
+
+# No let/in required, indentation sensitive
+</code></pre>
 
 </div>
 
@@ -589,7 +698,10 @@ import List exposing ( map, foldl )    -- map, foldl
 
 import Maybe exposing ( Maybe )        -- Maybe
 import Maybe exposing ( Maybe(..) )    -- Maybe, Just, Nothing
- </code></pre>
+
+
+
+</code></pre>
 
 <pre><code class="haskell">
 module MyModule where
@@ -604,10 +716,26 @@ import List ( map, foldl )             -- map, foldl
 
 import Maybe ( Maybe )        -- Maybe
 import Maybe ( Maybe(..) )    -- Maybe, Just, Nothing
- </code></pre>
 
-<pre><code class="roc haskell">
-TBC
+
+
+</code></pre>
+
+<pre><code class="roc coffeescript">
+interface MyModule
+    # Roc has no "expose everything" syntax
+    exposes [ foo, blah ]
+    imports
+        [
+            # Qualified imports
+            List as L, # L.map, L.walk
+
+            # Open imports (Roc has no "expose everything" syntax)
+            List.{ map, walk },
+
+            # Imports the Result module and also the Result type
+            Result.{ Result },
+        ]
  </code></pre>
 
 </div>
@@ -621,52 +749,52 @@ TBC
 <pre><code class="elm">
 answer : Int
 answer =
-  42
+    42
 
 factorial : Int -> Int
 factorial n =
-  List.product (List.range 1 n)
+    List.product (List.range 1 n)
 
 
 
 
 distance : { x : Float, y : Float } -> Float
 distance {x,y} =
-  sqrt (x^2 + y^2)
+    sqrt (x^2 + y^2)
  </code></pre>
 
 <pre><code class="haskell">
 answer :: Int
 answer =
-  42
+    42
 
 factorial :: Int -> Int
 factorial n =
-  List.product (List.range 1 n)
+    List.product (List.range 1 n)
 
 -- Haskell has no anonymous records
 data Point =  Point { x :: Float, y :: Float }
 
 distance :: Point -> Float
 distance Point{..} = -- Requires RecordWildCards
-  sqrt (x^2 + y^2)
+    sqrt (x^2 + y^2)
  </code></pre>
 
-<pre><code class="roc haskell">
-answer : Int
+<pre><code class="roc elm">
+answer : I32
 answer =
-  42
+    42
 
-factorial : Int, Int
+factorial : I32 -> I32
 factorial = \n ->
-  List.product (List.range 1 n)
+    List.product (List.range 1 n)
 
 
 
 
-distance : { x : Float, y : Float }, Float
-distance = \{x,y} ->
-  sqrt (x^2 + y^2)
+distance : { x : F64, y : F64 } -> F64
+distance = \{ x, y } ->
+    Num.sqrt (x ^ 2 + y ^ 2)
  </code></pre>
 
 </div>
@@ -707,19 +835,19 @@ origin =
   Point { x = 0, y = 0 }
  </code></pre>
 
-<pre><code class="roc haskell">
-Name : String
-Age : Int
+<pre><code class="roc elm">
+Name : Str
+Age : I32
 
-info : (Name, Age)
+info : [ Pair Name Age ]*
 info =
-  ("Steve", 28)
+    Pair "Steve" 28
 
-Point : { x : Float, y : Float }
+Point : { x : F64, y : F64 }
 
 origin : Point
 origin =
-  { x = 0, y = 0 }
+    { x: 0, y: 0 }
  </code></pre>
 
 </div>
@@ -733,8 +861,21 @@ In all cases `toEuros` must return a string.
 <pre><code class="elm">
 -- None, use concatenation
 costOnSale money =
-  "It cost " ++ toEuros money ++ " when on sale."
- </code></pre>
+    "It cost " ++ toEuros money ++ " when on sale."
+
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre>
 
 <pre><code class="haskell">
 -- None, use concatenation
@@ -754,19 +895,45 @@ costOnSale money =
   |]
  </code></pre>
 
-<pre><code class="roc haskell">
-costOnSale money =
-  euros = toEuros money
-  "It cost \(euros) when on sale."
- </code></pre>
+<pre><code class="roc elm">
+costOnSale = \money ->
+    euros = toEuros money
+
+    "It cost \(euros) when on sale."
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre>
 
 </div>
 
   </div>
 
-  <link rel="stylesheet" href="https://mario.net.au/f/atom-one-dark.css">
-  <script src="https://mario.net.au/f/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="atom-one-dark.min.css">
+  <script src="highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+
+    function *$xIter(xp) {
+      const iter = document.evaluate( xp, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null );
+      for (;;) { const node = iter.iterateNext(); if (!node) { break; } yield node; }
+    }
+    setTimeout(function(){
+      [...$xIter("//*[contains(text(), '#')]")].map(function(el){
+        // Workaround for roc comments when using haskell highlighter
+        el.classList.replace("hljs-meta", "hljs-comment")
+      })
+    }, 100)
+  </script>
   <style>
     body, h1, h2, h3, h4, h5, input {
       font-family: 'Open Sans', sans-serif;
