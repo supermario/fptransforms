@@ -93,16 +93,18 @@ Err "Problem!" : Result String a
 Array.fromList [ 1, 2, 3] : Array Int
 
 
+
 Set.fromList [1, 2, 3] : Set Int
 
 
 x : Dict Int Bool
 x = Dict.fromList [ ( 1 , True ), ( 2, False ) ]
 
+
 -- Unit type
 () : ()
 
- </code></pre>
+</code></pre>
 
 <pre><code class="haskell">
 1 :: Int
@@ -140,6 +142,7 @@ Left "Problem!" :: Either String a
 import qualified Data.Vector as Vector
 Vector.fromList [1,2,3] :: Vector Int
 
+
 import qualified Data.Set as Set
 Set.fromList [1,2,3] : Set Int
 
@@ -150,9 +153,9 @@ x = Map.fromList [(1,True), (2, False)]
 -- Unit type
 () :: ()
 
- </code></pre>
+</code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc haskell">
 1 : I32
 
 1.1 : F64
@@ -174,7 +177,10 @@ content that has "quotation marks".
 
 
 # Roc does not have tuple syntax
+
 # or a built-in Maybe type
+
+
 
 Ok 123 : Result I32 *
 
@@ -186,16 +192,17 @@ Err "Problem!" : Result * Str
 # but List is implemented using
 # a flat array instead of a linked list
 
-
 [: 1, 2, 3 :] : Set Int
 
 
 x : Dict I32 Bool
 x = {: 1 => True, 2 => False :}
 
+
 -- Unit type
 {} : {}
- </code></pre>
+
+</code></pre>
 
 </div>
 
@@ -213,7 +220,8 @@ Todo : Status
 Doing : Status
 
 Done : Status
- </code></pre>
+
+</code></pre>
 
 <pre><code class="haskell">
 data Status = Todo | Doing | Done
@@ -223,7 +231,8 @@ Todo :: Status
 Doing :: Status
 
 Done :: Status
- </code></pre>
+
+</code></pre>
 
 <pre><code class="roc haskell">
 Status : [ Todo | Doing | Done ]
@@ -233,6 +242,7 @@ Todo : Status
 Doing : Status
 
 Done : Status
+
 </code></pre>
 
 </div>
@@ -246,7 +256,8 @@ type Maybe a = Just a | Nothing
 Just 123 : Maybe Int
 
 Nothing : Maybe a
- </code></pre>
+
+</code></pre>
 
 <pre><code class="haskell">
 data Maybe a = Just a | Nothing
@@ -254,7 +265,8 @@ data Maybe a = Just a | Nothing
 Just 123 :: Maybe Int
 
 Nothing :: Maybe a
- </code></pre>
+
+</code></pre>
 
 <pre><code class="roc haskell">
 Maybe a : [ Just a | Nothing ]
@@ -262,6 +274,7 @@ Maybe a : [ Just a | Nothing ]
 Just 123 : Maybe Int
 
 Nothing : Maybe *
+
 </code></pre>
 
 </div>
@@ -284,6 +297,7 @@ List.map .x [ point, { x = 0, y = 0 } ] -- field access function
     | x = point.x + 1
     , y = point.y + 1
 }
+
 
 dist { x, y } =               -- pattern matching on fields
     sqrt (x ^ 2 + y ^ 2)
@@ -309,6 +323,7 @@ point
   { x = (x point) + 1
   , y = (y point) + 1
   }
+
 
 dist Point{..} = -- Requires RecordWildCards
   sqrt (x^2 + y^2)
@@ -363,6 +378,9 @@ add x y = x + y
 add : Int -> Int -> Int
 add = (+)
 
+
+
+
 poly : a -> Int
 poly x = 14
  </code></pre>
@@ -376,6 +394,9 @@ add x y = x + y
 
 add :: Int -> Int -> Int
 add = (+)
+
+
+
 
 poly :: a -> Int
 poly x = 14
@@ -484,7 +505,11 @@ viewNames =
   List.sort . List.intercalate ", "
  </code></pre>
 
-<pre><code class="roc coffeescript">
+<pre><code class="roc haskell">
+
+
+
+
 viewNames = \names ->
     Str.join (List.sort names Str.alphabetical) ", "
 
@@ -497,7 +522,9 @@ viewNames = \names ->
         |> Str.join ", "
 
 # Roc does not have an equivalent of
-# the `<<` operator or the `>>` operator.
+# the `<<` operator
+
+# or the `>>` operator.
 
  </code></pre>
 
@@ -543,7 +570,10 @@ else if key == 38 then
     n - 1
 else
     n
- </code></pre>
+
+
+
+</code></pre>
 
 </div>
 
@@ -592,6 +622,7 @@ when maybe is
 # Roc does not have special
 # pattern matching syntax for lists
 
+
 fib = \n ->
     when n is
         0 -> 1
@@ -608,37 +639,43 @@ fib = \n ->
 
 <div class="line">
 <pre><code class="elm">
-let
-    ( three, four ) =
-        ( 3, 4 )
+functionWithLetDecs =
+    let
+        ( three, four ) =
+            ( 3, 4 )
 
-    hypotenuse a b =
-        sqrt (a^2 + b^2)
-in
-hypotenuse three four
- </code></pre>
+        hypotenuse a b =
+            sqrt (a^2 + b^2)
+    in
+    hypotenuse three four
+
+</code></pre>
 
 <pre><code class="haskell">
-let
-    ( three, four ) =
-        ( 3, 4 )
+functionWithLetDecs =
+  let
+      ( three, four ) =
+          ( 3, 4 )
 
-    hypotenuse a b =
-        sqrt (a^2 + b^2)
-in
-hypotenuse three four
- </code></pre>
+      hypotenuse a b =
+          sqrt (a^2 + b^2)
+  in
+  hypotenuse three four
 
-<pre><code class="roc elixir">
+</code></pre>
+
+<pre><code class="roc haskell">
+functionWithLetDecs =
+    Pair three four =
+      Pair 3 4
+
+    hypotenuse = \a, b ->
+      Num.sqrt (a ^ 2 + b ^ 2)
+
+    hypotenuse three four
+
 # No let/in required, indentation sensitive
-Pair three four =
-    Pair 3 4
-
-hypotenuse = \a, b ->
-    Num.sqrt (a ^ 2 + b ^ 2)
-
-hypotenuse three four
- </code></pre>
+</code></pre>
 
 </div>
 
@@ -661,7 +698,10 @@ import List exposing ( map, foldl )    -- map, foldl
 
 import Maybe exposing ( Maybe )        -- Maybe
 import Maybe exposing ( Maybe(..) )    -- Maybe, Just, Nothing
- </code></pre>
+
+
+
+</code></pre>
 
 <pre><code class="haskell">
 module MyModule where
@@ -676,9 +716,12 @@ import List ( map, foldl )             -- map, foldl
 
 import Maybe ( Maybe )        -- Maybe
 import Maybe ( Maybe(..) )    -- Maybe, Just, Nothing
- </code></pre>
 
-<pre><code class="roc elixir">
+
+
+</code></pre>
+
+<pre><code class="roc coffeescript">
 interface MyModule
     # Roc has no "expose everything" syntax
     exposes [ foo, blah ]
@@ -687,12 +730,10 @@ interface MyModule
             # Qualified imports
             List as L, # L.map, L.walk
 
-            # Open imports (Roc has no
-            # "expose everything" syntax)
+            # Open imports (Roc has no "expose everything" syntax)
             List.{ map, walk }
 
-            # Imports the Result module
-            # and also the Result type
+            # Imports the Result module and also the Result type
             Result.{ Result }
         ]
  </code></pre>
@@ -752,7 +793,7 @@ factorial = \n ->
 
 
 distance : { x : F64, y : F64 } -> F64
-distance = \{ x, y} ->
+distance = \{ x, y } ->
     Num.sqrt (x ^ 2 + y ^ 2)
  </code></pre>
 
@@ -821,7 +862,20 @@ In all cases `toEuros` must return a string.
 -- None, use concatenation
 costOnSale money =
     "It cost " ++ toEuros money ++ " when on sale."
- </code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre>
 
 <pre><code class="haskell">
 -- None, use concatenation
@@ -846,15 +900,40 @@ costOnSale = \money ->
     euros = toEuros money
 
     "It cost \(euros) when on sale."
- </code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre>
 
 </div>
 
   </div>
 
-  <link rel="stylesheet" href="https://mario.net.au/f/atom-one-dark.css">
-  <script src="https://mario.net.au/f/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="atom-one-dark.min.css">
+  <script src="highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+
+    function *$xIter(xp) {
+      const iter = document.evaluate( xp, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null );
+      for (;;) { const node = iter.iterateNext(); if (!node) { break; } yield node; }
+    }
+    setTimeout(function(){
+      [...$xIter("//*[contains(text(), '#')]")].map(function(el){
+        // Workaround for roc comments when using haskell highlighter
+        el.classList.replace("hljs-meta", "hljs-comment")
+      })
+    }, 100)
+  </script>
   <style>
     body, h1, h2, h3, h4, h5, input {
       font-family: 'Open Sans', sans-serif;
