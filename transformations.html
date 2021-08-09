@@ -409,11 +409,11 @@ addOne = \x -> x + 1
 add : I32, I32 -> I32
 add = \x, y -> x + y
 
+add : I32, I32 -> I32
+add = Num.add
 # Roc does not have (+) syntax for operators;
 # instead, operators desugar to
 # plain function calls like Num.add
-add : I32, I32 -> I32
-add = Num.add
 
 poly : * -> I32
 poly = \x -> 14
