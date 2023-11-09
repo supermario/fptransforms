@@ -48,6 +48,10 @@
 # This is a comment
  </code></pre>
 
+<pre><code class="gleam rust">
+-- This is a comment
+ </code></pre>
+
 </div>
 
 
@@ -204,6 +208,54 @@ x = {: 1 => True, 2 => False :}
 
 </code></pre>
 
+<pre><code class="gleam haskell">
+1: Int
+
+1.1: Float
+
+True: Bool
+
+False: Bool
+
+-- no char literal
+
+"hello": String
+
+-- multi-line String
+"
+This is useful(?) for holding JSON or other
+content that has \"quotation marks\".
+"
+
+
+
+#(1,"c"): #(Int, String)
+
+Some(123): Option(Int)
+
+None: Option(a)
+
+Ok(123): Result(Int, err)
+
+Error("Problem!"): Result(String, a)
+
+[1, 2, 3]: List(Int)
+
+-- no Array in stdlib, JS thing see gleam_javascript
+
+
+
+set.from_list([1, 2, 3]): Set(Int)
+
+
+
+let x: Map(Int, Bool) = map.from_list([#(1 , True), #(2, False )])
+
+
+-- Unit type
+Nil: Nil
+ </code></pre>
+
 </div>
 
 
@@ -245,6 +297,17 @@ Done : Status
 
 </code></pre>
 
+<pre><code class="gleam rust">
+type Status { Todo Doing Done }
+
+Todo: Status
+
+Doing: Status
+
+Done: Status
+
+</code></pre>
+
 </div>
 
 <p>Custom types can be polymorphic. <code>Maybe a</code> is an example:</p>
@@ -274,6 +337,15 @@ Maybe a : [ Just a, Nothing ]
 Just 123 : Maybe Int
 
 Nothing : Maybe *
+
+</code></pre>
+
+<pre><code class="gleam rust">
+type Maybe(a) { Just(a) Nothing }
+
+Just(123): Maybe(Int)
+
+Nothing: Maybe(a)
 
 </code></pre>
 
@@ -361,6 +433,37 @@ Location :
     }
  </code></pre>
 
+<pre><code class="gleam rust">
+                              -- no anonymous records
+type Point { -- nominal types for records
+  Point(x: Int, y: Int)
+}
+const point = Point(3, 4)     -- create a record
+
+
+point.x                       -- access field
+
+list.map([ point, Point(x: 0, y: 0) ], fn(p) { p.x })  -- field access function
+
+Point(..point, x: 6)          -- update a field
+
+Point(..point,                -- update many fields
+  x: point.x + 1,
+  y: point.y + 1,
+)
+
+import gleam/int
+fn dist(point) {              -- no pattern matching on fields in function heads
+  let Point(x,y) = point
+  int.square_root(int.power(x, 2) + int.power(y, 2))
+}
+
+type Location {               -- nominal types for records
+    Location(line: Int, column: Int)
+}
+ </code></pre>
+
+
 </div>
 
 
@@ -418,6 +521,17 @@ add = Num.add
 poly : * -> I32
 poly = \x -> 14
  </code></pre>
+
+<pre><code class="gleam rust">
+addOne(x: Int) = x + 1
+
+
+add(x: Int, y: Int) = x + y
+
+add : Int -> Int -> Int
+add = (+)
+ </code></pre>
+
 
 </div>
 
@@ -962,6 +1076,10 @@ costOnSale = \money ->
     }
     .roc::before {
       content: "                                          Roc";
+      color: #fff;
+    }
+    .gleam::before {
+      content: "                                        Gleam";
       color: #fff;
     }
 
