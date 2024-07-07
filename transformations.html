@@ -863,10 +863,10 @@ In all cases `toEuros` must return a string.
 costOnSale money =
     "It cost " ++ toEuros money ++ " when on sale."
 
-
-
-
-
+-- Alternatively, poor man's interpolation
+costOnSale money =
+    "It cost $euros when on sale."
+        |> String.replace "$euros" (toEuros money)
 
 
 
