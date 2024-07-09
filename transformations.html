@@ -762,6 +762,7 @@ case xs of
     []     -> Nothing
 
 
+
 fib n =
     case n of
       0 -> 1
@@ -774,10 +775,11 @@ case maybe of
     Just xs -> xs
     Nothing -> []
 
-case xs of
-    []     -> Nothing
-    [a, b] -> Just { first = a, rest = [b] }
-    _ -> Array.popFirst xs
+-- Gren does not have a cons (::) operator.
+case args of
+    [] -> "No arguments provided"
+    [ "greet", name ] -> "Hello, " ++ name
+    _ -> "Unrecognized arguments"
 
 fib n =
     case n of
@@ -796,6 +798,7 @@ case xs of
   []     -> Nothing
 
 
+
 fib n =
   case n of
     0 -> 1
@@ -810,6 +813,7 @@ when maybe is
 
 # Roc does not have special
 # pattern matching syntax for lists
+
 
 
 
