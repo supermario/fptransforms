@@ -40,6 +40,10 @@
 -- This is a comment
  </code></pre>
 
+<pre><code class="gren">
+-- This is a comment
+ </code></pre>
+
 <pre><code class="haskell">
 -- This is a comment
  </code></pre>
@@ -101,8 +105,63 @@ x : Dict Int Bool
 x = Dict.fromList [ ( 1 , True ), ( 2, False ) ]
 
 
+
+
+
 -- Unit type
 () : ()
+
+</code></pre>
+
+<pre><code class="gren elm">
+1 : Int
+
+1.1 : Float
+
+True : Bool
+
+False : Bool
+
+'c' : Char
+
+"hello" : String
+
+-- multi-line String
+"""
+This is useful for holding JSON or other
+content that has "quotation marks".
+"""
+
+
+
+-- gren does not have tuples
+
+Just 123 : Maybe Int
+
+Nothing : Maybe a
+
+Ok 123 : Result err Int
+
+Err "Problem!" : Result String a
+
+-- gren does not have a list type
+
+[ 1, 2, 3 ] : Array Int
+
+
+
+Set.fromArray [1, 2, 3] : Set Int
+
+
+x : Dict Int Bool
+x = 
+  Dict.empty 
+    |> Dict.set 1 True
+    |> Dict.set 2 False
+
+
+-- Unit type
+{} : {}
 
 </code></pre>
 
@@ -149,6 +208,9 @@ Set.fromList [1,2,3] : Set Int
 import qualified Data.Map as Map
 x :: Map Int Bool
 x = Map.fromList [(1,True), (2, False)]
+
+
+
 
 -- Unit type
 () :: ()
@@ -199,6 +261,9 @@ x : Dict I32 Bool
 x = {: 1 => True, 2 => False :}
 
 
+
+
+
 -- Unit type
 {} : {}
 
@@ -213,6 +278,17 @@ x = {: 1 => True, 2 => False :}
 
 <div class="line">
 <pre><code class="elm">
+type Status = Todo | Doing | Done
+
+Todo : Status
+
+Doing : Status
+
+Done : Status
+
+</code></pre>
+
+<pre><code class="gren elm">
 type Status = Todo | Doing | Done
 
 Todo : Status
@@ -259,6 +335,15 @@ Nothing : Maybe a
 
 </code></pre>
 
+<pre><code class="gren elm">
+type Maybe a = Just a | Nothing
+
+Just 123 : Maybe Int
+
+Nothing : Maybe a
+
+</code></pre>
+
 <pre><code class="haskell">
 data Maybe a = Just a | Nothing
 
@@ -290,6 +375,32 @@ point =                       -- create a record
 point.x                       -- access field
 
 List.map .x [ point, { x = 0, y = 0 } ] -- field access function
+
+{ point | x = 6 }             -- update a field
+
+{ point                       -- update many fields
+    | x = point.x + 1
+    , y = point.y + 1
+}
+
+
+dist { x, y } =               -- pattern matching on fields
+    sqrt (x ^ 2 + y ^ 2)
+
+type alias Location =         -- type aliases for records
+    { line : Int
+    , column : Int
+    }
+
+ </code></pre>
+
+<pre><code class="gren elm">
+point =                       -- create a record
+    { x = 3, y = 4 }
+
+point.x                       -- access field
+
+Array.map .x [ point, { x = 0, y = 0 } ] -- field access function
 
 { point | x = 6 }             -- update a field
 
@@ -385,6 +496,23 @@ poly : a -> Int
 poly x = 14
  </code></pre>
 
+<pre><code class="gren elm">
+addOne : Int -> Int
+addOne x = x + 1
+
+add : Int -> Int -> Int
+add x y = x + y
+
+add : Int -> Int -> Int
+add = (+)
+
+
+
+
+poly : a -> Int
+poly x = 14
+ </code></pre>
+
 <pre><code class="haskell">
 addOne :: Int -> Int
 addOne x = x + 1
@@ -434,6 +562,14 @@ squares =
     List.map (\n -> n ^ 2) (List.range 1 100)
  </code></pre>
 
+<pre><code class="gren elm">
+square =
+    \n -> n ^ 2
+
+squares =
+    Array.map (\n -> n ^ 2) (Array.range 1 100)
+ </code></pre>
+
 <pre><code class="haskell">
 square =
   \n -> n ^ 2
@@ -449,8 +585,6 @@ square = \n ->
 squares =
     List.map (List.range 1 100) \n -> n ^ 2
  </code></pre>
-
-</div>
 
 
 
@@ -480,6 +614,29 @@ viewNames =
 
 viewNames =
     List.sort >> String.join ", "
+ </code></pre>
+
+<pre><code class="gren elm">
+
+
+
+
+viewNames names =
+    String.join ", " (Array.sort names)
+
+viewNames names =
+    String.join ", " <| Array.sort names
+
+viewNames names =
+    names
+        |> Array.sort
+        |> String.join ", "
+
+viewNames =
+    String.join ", " << Array.sort
+
+viewNames =
+    Array.sort >> String.join ", "
  </code></pre>
 
 <pre><code class="haskell">
@@ -548,6 +705,19 @@ else
     n
  </code></pre>
 
+<pre><code class="gren elm">
+if power > 9000 then "Wow!" else "Meh"
+
+if key == 40 then
+    n + 1
+
+else if key == 38 then
+    n - 1
+
+else
+    n
+ </code></pre>
+
 <pre><code class="haskell">
 if power > 9000 then "Wow!" else "Meh"
 
@@ -591,6 +761,26 @@ case xs of
     hd::tl -> Just (hd,tl)
     []     -> Nothing
 
+
+
+fib n =
+    case n of
+      0 -> 1
+      1 -> 1
+      _ -> fib (n-1) + fib (n-2)
+ </code></pre>
+
+<pre><code class="gren elm">
+case maybe of
+    Just xs -> xs
+    Nothing -> []
+
+-- Gren does not have a cons (::) operator.
+case args of
+    [] -> "No arguments provided"
+    [ "greet", name ] -> "Hello, " ++ name
+    _ -> "Unrecognized arguments"
+
 fib n =
     case n of
       0 -> 1
@@ -607,6 +797,8 @@ case xs of
   hd:tl -> Just (hd,tl)
   []     -> Nothing
 
+
+
 fib n =
   case n of
     0 -> 1
@@ -621,6 +813,8 @@ when maybe is
 
 # Roc does not have special
 # pattern matching syntax for lists
+
+
 
 
 fib = \n ->
@@ -643,6 +837,19 @@ functionWithLetDecs =
     let
         ( three, four ) =
             ( 3, 4 )
+
+        hypotenuse a b =
+            sqrt (a^2 + b^2)
+    in
+    hypotenuse three four
+
+</code></pre>
+
+<pre><code class="gren elm">
+functionWithLetDecs =
+    let
+        { three, four } =
+            { three = 3, four = 4 }
 
         hypotenuse a b =
             sqrt (a^2 + b^2)
@@ -695,6 +902,24 @@ import List as L                       -- L.map, L.foldl
 -- open imports
 import List exposing (..)              -- map, foldl, concat, ...
 import List exposing ( map, foldl )    -- map, foldl
+
+import Maybe exposing ( Maybe )        -- Maybe
+import Maybe exposing ( Maybe(..) )    -- Maybe, Just, Nothing
+
+
+
+</code></pre>
+
+<pre><code class="gren elm">
+module MyModule exposing (..)
+
+-- qualified imports
+import Array                            -- Array.map, Array.foldl
+import Array as A                       -- A.map, A.foldl
+
+-- open imports
+import Array exposing (..)              -- map, foldl, concat, ...
+import Array exposing ( map, foldl )    -- map, foldl
 
 import Maybe exposing ( Maybe )        -- Maybe
 import Maybe exposing ( Maybe(..) )    -- Maybe, Just, Nothing
@@ -763,6 +988,23 @@ distance {x,y} =
     sqrt (x^2 + y^2)
  </code></pre>
 
+<pre><code class="gren elm">
+answer : Int
+answer =
+    42
+
+factorial : Int -> Int
+factorial n =
+    Array.foldl (*) 1 (Array.range 1 n)
+
+
+
+
+distance : { x : Float, y : Float } -> Float
+distance {x,y} =
+    sqrt (x^2 + y^2)
+ </code></pre>
+
 <pre><code class="haskell">
 answer :: Int
 answer =
@@ -820,6 +1062,21 @@ origin =
   { x = 0, y = 0 }
  </code></pre>
 
+<pre><code class="gren elm">
+type alias Name = String
+type alias Age = Int
+
+info : { name : Name, age : Age }
+info =
+  { name = "Steve", age = 28 }
+
+type alias Point = { x : Float, y : Float }
+
+origin : Point
+origin =
+  { x = 0, y = 0 }
+ </code></pre>
+
 <pre><code class="haskell">
 type Name = String
 type Age = Int
@@ -867,6 +1124,25 @@ costOnSale money =
 costOnSale money =
     "It cost $euros when on sale."
         |> String.replace "$euros" (toEuros money)
+
+
+
+
+
+
+
+
+</code></pre>
+
+<pre><code class="gren elm">
+-- None, use concatenation
+costOnSale money =
+    "It cost " ++ toEuros money ++ " when on sale."
+
+
+
+
+
 
 
 
@@ -954,6 +1230,10 @@ costOnSale = \money ->
 
     .elm::before {
       content: "                                          Elm";
+      color: #fff;
+    }
+    .gren::before {
+      content: "                                         Gren";
       color: #fff;
     }
     .haskell::before {
